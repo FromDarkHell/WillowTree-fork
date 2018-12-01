@@ -16,10 +16,11 @@
  *  along with WillowTree#.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Linq;
 using Aga.Controls.Tree;
 using WillowTree.CustomControls;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Text;
 
 namespace WillowTree
 {
@@ -136,6 +137,34 @@ namespace WillowTree
             return "2.2.1";
         }
 
+        public static string DictionaryToString<TKey, TValue>(IDictionary<TKey, TValue> dict)
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.Append("{");
+            foreach (var pair in dict)
+            {
+                stringBuilder.Append(string.Format("\"{0}\"=\"{1}\",", pair.Key, pair.Value));
+            }
+            stringBuilder.Append("}");
+
+            return stringBuilder.ToString();
+        }
+
+        public static Dictionary<string, string> StringToDictionary(string dict)
+        {
+            Dictionary<string, string> returnVal = new Dictionary<string, string>();
+            for (int i = 0; i < dict.Split(',').Length; i++)
+            {
+                string dictData = dict.Split(',')[i].Replace("{", "");
+                if (dictData.Contains("}")) continue;
+                string dictKey = dictData.Split('=')[0].Replace("\"", "");
+                string dictValue = dictData.Split('=')[1].Replace("\"", "");
+                returnVal.Add(dictKey, dictValue);
+            }
+
+            return returnVal;
+        }
+
         public class WTOpenFileDialog
         {
             OpenFileDialog fDlg = null;
@@ -156,6 +185,7 @@ namespace WillowTree
             public String[] FileNames() { return fDlg.FileNames; }
             public void Multiselect(bool multiselect) { fDlg.Multiselect = multiselect; }
         }
+
         public class WTSaveFileDialog
         {
             SaveFileDialog fDlg = null;

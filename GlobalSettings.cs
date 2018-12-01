@@ -15,26 +15,25 @@
  *  You should have received a copy of the GNU General Public License
  *  along with WillowTree#.  If not, see <http://www.gnu.org/licenses/>.
  */
-using System;
-using System.Linq;
 using System.Text;
 using System.Xml;
 using System.Drawing;
+using System.Collections.Generic;
 
 namespace WillowTree
 {
-    public enum InputMode { Standard, Advanced, UseGlobalSetting};
+    public enum InputMode { Standard, Advanced, UseGlobalSetting };
 
     public class GlobalSettings
     {
         // GlobalSettings provides a place to collect all the settings that
         // I want to be able to be loaded and saved to the user option
         // file options.xml.  
-        public delegate void InputMethodChangedEventHandler(WillowTree.InputMode method, bool UseHexadecimal);
+        public delegate void InputMethodChangedEventHandler(InputMode method, bool UseHexadecimal);
         static public event InputMethodChangedEventHandler InputMethodChanged;
 
-        static private WillowTree.InputMode _InputMode = WillowTree.InputMode.Standard;
-        static public WillowTree.InputMode InputMode
+        static private InputMode _InputMode = InputMode.Standard;
+        static public InputMode InputMode
         {
             get { return _InputMode; }
             set
@@ -55,6 +54,7 @@ namespace WillowTree
         static public bool backupSaves = true;
         static public string lastLockerFile = string.Empty;
         static public Color BackgroundColor = Color.FromArgb(48, 48, 48);
+        static public Dictionary<string, string> customCharacters = new Dictionary<string, string>();
 
         // ------- MAX VALUES ---------
         // All values that exceed these sanity limits will be adjusted by the UI and give the 
@@ -66,7 +66,7 @@ namespace WillowTree
         // the limits in 'options.xml'.  These values are the defaults if 'options.xml' has
         // not yet been created or its values are missing or corrupt.
         // ----------------------------
-        
+
         // Borderlands 1.4.2.1 (Steam PC) has a bug that allows the cash to go to an extreme 
         // negative number if you exceed int.MaxValue when picking up a money bag off the ground.
         // You cannot buy anything in that state until you sell an item to the shop, which will 
@@ -119,6 +119,7 @@ namespace WillowTree
                 gs.WriteElementString("autoSaveItems", autoSaveItems.ToString());
                 gs.WriteElementString("backupSaves", backupSaves.ToString());
                 gs.WriteElementString("lastLockerFile", db.OpenedLockerFilename());
+                gs.WriteElementString("customCharacters", Util.DictionaryToString(customCharacters));
 
                 gs.WriteElementString("MaxCash", MaxCash.ToString());
                 gs.WriteElementString("MaxLevel", MaxLevel.ToString());
@@ -167,6 +168,13 @@ namespace WillowTree
             return false;
         }
 
+        static private bool XmlReadDict(XmlTextReader gs, ref Dictionary<string, string> var)
+        {
+            var = Util.StringToDictionary(gs.ReadElementContentAsString());
+
+            return true;
+        }
+
         static public void Load()
         {
             string filename = db.XmlPath + "options.xml";
@@ -198,6 +206,7 @@ namespace WillowTree
                             case "autoSaveItems": XmlReadBool(gs, ref autoSaveItems); break;
                             case "backupSaves": XmlReadBool(gs, ref backupSaves); break;
                             case "lastLockerFile": db.OpenedLockerFilename(gs.ReadElementContentAsString()); break;
+                            case "customCharacters": XmlReadDict(gs, ref customCharacters); break;
 
                             case "MaxCash": XmlReadInt(gs, ref MaxCash); break;
                             case "MaxLevel": XmlReadInt(gs, ref MaxLevel); break;
@@ -225,12 +234,14 @@ namespace WillowTree
                                     string text = gs.ReadElementContentAsString();
                                     if (uint.TryParse(text, System.Globalization.NumberStyles.HexNumber, System.Globalization.CultureInfo.InvariantCulture, out colorval))
                                         GlobalSettings.RarityColor[index] = Color.FromArgb((int)colorval);
-                                } catch { }
+                                }
+                                catch { }
                                 break;
                         }
                     }
                 }
             }
         }
+
     }
 }

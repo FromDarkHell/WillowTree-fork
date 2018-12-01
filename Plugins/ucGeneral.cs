@@ -33,7 +33,6 @@ namespace WillowTree.Plugins
     {
         WillowSaveGame CurrentWSG;
         XmlFile LocationsXml;
-        Dictionary<string, string> customCharacters = new Dictionary<string, string>();
         Dictionary<string, string> defaultCharacters = new Dictionary<string, string> {
             { "Soldier", "gd_Roland.Character.CharacterClass_Roland" },
             { "Siren", "gd_lilith.Character.CharacterClass_Lilith" },
@@ -110,10 +109,10 @@ namespace WillowTree.Plugins
             Util.SetNumericUpDown(SaveNumber, CurrentWSG.SaveNumber);
             UI_UpdateCurrentLocationComboBox(CurrentWSG.CurrentLocation);
 
-            if (!customCharacters.ContainsValue("gd_Roland.Character.CharacterClass_Roland"))
+            if (!GlobalSettings.customCharacters.ContainsValue("gd_Roland.Character.CharacterClass_Roland"))
             {
                 foreach (var character in defaultCharacters)
-                    customCharacters.Add(character.Key, character.Value);
+                    GlobalSettings.customCharacters.Add(character.Key, character.Value);
             }
 
             string possibleCharacter = "Unknown";
@@ -136,15 +135,15 @@ namespace WillowTree.Plugins
                 }
                 else
                 {
-                    if (!customCharacters.Keys.Contains(possibleCharacter)
-                       && !customCharacters.Values.Contains(CurrentWSG.Class))
+                    if (!GlobalSettings.customCharacters.Keys.Contains(possibleCharacter)
+                       && !GlobalSettings.customCharacters.Values.Contains(CurrentWSG.Class))
                     {
-                        customCharacters.Add(possibleCharacter, CurrentWSG.Class);
+                        GlobalSettings.customCharacters.Add(possibleCharacter, CurrentWSG.Class);
                     }
                 }
             }
             // This'll select our current class now that it's been added.
-            foreach (var character in customCharacters)
+            foreach (var character in GlobalSettings.customCharacters)
             {
                 // No duplicates.
                 if (!Class.Items.Contains(character.Key)) Class.Items.Add(character.Key);
@@ -168,6 +167,7 @@ namespace WillowTree.Plugins
             DoWindowTitle();
             Application.DoEvents();
             DoLocationTree();
+            GlobalSettings.Save();
             this.Enabled = true;
         }
 
@@ -204,13 +204,31 @@ namespace WillowTree.Plugins
 
         private void UpdateClass()
         {
-            foreach (var character in customCharacters)
+            foreach (var character in GlobalSettings.customCharacters)
             {
                 if ((string)Class.SelectedItem == character.Key)
                 {
                     CurrentWSG.Class = character.Value;
                 }
             }
+        }
+
+        public void fixClasses(Dictionary<string, string> removedCharacters, Dictionary<string, string> addedCharacters)
+        {
+            foreach (var character in GlobalSettings.customCharacters)
+                if (!Class.Items.Contains(character.Key)) Class.Items.Add(character.Key);
+
+            foreach (var character in addedCharacters)
+                if (!Class.Items.Contains(character.Key)) Class.Items.Add(character.Key);
+
+            foreach (var character in removedCharacters)
+                Class.Items.Remove(character.Key);
+            try
+            {
+                // This'll select our current class now that it's been added.
+                if (Class.SelectedItem != null) UpdateClass();
+            }
+            catch (ArgumentOutOfRangeException) { }
         }
 
         public void UI_UpdateCurrentLocationComboBox(string locationToSelect)

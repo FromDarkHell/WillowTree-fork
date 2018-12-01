@@ -76,6 +76,8 @@ namespace WillowTree
             this.showEffectiveLevelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.itemAutoSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backupSaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.editCharactersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.SaveOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
@@ -209,6 +211,8 @@ namespace WillowTree
             this.showEffectiveLevelsToolStripMenuItem,
             this.itemAutoSaveToolStripMenuItem,
             this.backupSaveToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.editCharactersToolStripMenuItem,
             this.toolStripSeparator2,
             this.SaveOptions});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
@@ -312,6 +316,18 @@ namespace WillowTree
             this.backupSaveToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
             this.backupSaveToolStripMenuItem.Text = "Backup save on \"Save\" button";
             this.backupSaveToolStripMenuItem.Click += new System.EventHandler(this.backupSaveToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(220, 6);
+            // 
+            // editCharactersToolStripMenuItem
+            // 
+            this.editCharactersToolStripMenuItem.Name = "editCharactersToolStripMenuItem";
+            this.editCharactersToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.editCharactersToolStripMenuItem.Text = "Edit Character Options";
+            this.editCharactersToolStripMenuItem.Click += new System.EventHandler(this.editCharactersToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -429,5 +445,7 @@ namespace WillowTree
         private System.Windows.Forms.ToolStripMenuItem New;
         private System.Windows.Forms.ToolStripMenuItem itemAutoSaveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem backupSaveToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem editCharactersToolStripMenuItem;
     }
 }

@@ -48,7 +48,7 @@ namespace WillowTree
     {
         PluginComponentManager PluginManager = Services.PluginManager;
         ThemeManager ThemeManager = Services.ThemeManager;
-
+        public ucGeneral generalTab = null;
         WillowSaveGame CurrentWSG;
 
         public WillowSaveGame SaveData
@@ -92,8 +92,9 @@ namespace WillowTree
             Save.Enabled = false;
             SaveAs.Enabled = false;
             SelectFormat.Enabled = false;
-
-            CreatePluginAsTab("General", new ucGeneral());
+            ucGeneral general = new ucGeneral();
+            generalTab = general;
+            CreatePluginAsTab("General", general);
             CreatePluginAsTab("Weapons", new ucGears());
             CreatePluginAsTab("Items", new ucGears());
             CreatePluginAsTab("Skills", new ucSkills());
@@ -346,7 +347,6 @@ namespace WillowTree
         {
             CurrentWSG = new WillowSaveGame();
             string fileName = db.defaultSave;
-            Console.WriteLine(fileName);
             CurrentWSG.LoadWSG(fileName);
             CurrentWSG.SaveWSG(fileName);
             Save.Enabled = true;
@@ -563,6 +563,18 @@ namespace WillowTree
             GlobalSettings.UseColor = !GlobalSettings.UseColor;
             SetUITreeStyles(GlobalSettings.UseColor);
         }
+        private void editCharactersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Visible = false;
+            CharacterManager charManager = new CharacterManager(this);
+            charManager.Visible = true;
+        }
+
+        void characterManager_Closing(object sender, FormClosingEventArgs e)
+        {
+            this.Visible = true;
+        }
+
         private void optionsToolStripMenuItem_DropDownOpening(object sender, EventArgs e)
         {
             colorizeListsToolStripMenuItem.Checked = GlobalSettings.UseColor;
