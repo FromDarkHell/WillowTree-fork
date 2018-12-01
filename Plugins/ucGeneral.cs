@@ -34,6 +34,12 @@ namespace WillowTree.Plugins
         WillowSaveGame CurrentWSG;
         XmlFile LocationsXml;
         Dictionary<string, string> customCharacters = new Dictionary<string, string>();
+        Dictionary<string, string> defaultCharacters = new Dictionary<string, string> {
+            { "Soldier", "gd_Roland.Character.CharacterClass_Roland" },
+            { "Siren", "gd_lilith.Character.CharacterClass_Lilith" },
+            { "Hunter", "gd_mordecai.Character.CharacterClass_Mordecai" },
+            { "Berserker", "gd_Brick.Character.CharacterClass_Brick" }};
+
         public ucGeneral()
         {
             InitializeComponent();
@@ -63,7 +69,6 @@ namespace WillowTree.Plugins
             CurrentWSG = null;
             LocationsXml = null;
         }
-
 
         public void OnGameLoaded(object sender, PluginEventArgs e)
         {
@@ -96,36 +101,33 @@ namespace WillowTree.Plugins
                 Util.SetNumericUpDown(Cash, int.MaxValue);
             else
                 Util.SetNumericUpDown(Cash, CurrentWSG.Cash);
-          
+
             Util.SetNumericUpDown(BackpackSpace, CurrentWSG.BackpackSize);
             if (BackpackSpace.Value != CurrentWSG.BackpackSize)
                 MessageBox.Show("The character's backpack capacity was outside the acceptable range.  It has been adjusted.\n\nOld: " + CurrentWSG.BackpackSize + "\nNew: " + (int)BackpackSpace.Value);
 
             Util.SetNumericUpDown(EquipSlots, CurrentWSG.EquipSlots);
             Util.SetNumericUpDown(SaveNumber, CurrentWSG.SaveNumber);
-
             UI_UpdateCurrentLocationComboBox(CurrentWSG.CurrentLocation);
-            bool defaultCharacter = false;
-            if(!customCharacters.ContainsValue("gd_Roland.Character.CharacterClass_Roland"))
+
+            if (!customCharacters.ContainsValue("gd_Roland.Character.CharacterClass_Roland"))
             {
-                customCharacters.Add("Soldier", "gd_Roland.Character.CharacterClass_Roland");
-                customCharacters.Add("Siren", "gd_lilith.Character.CharacterClass_Lilith");
-                customCharacters.Add("Hunter", "gd_mordecai.Character.CharacterClass_Mordecai");
-                customCharacters.Add("Berserker", "gd_Brick.Character.CharacterClass_Brick");
+                foreach (var character in defaultCharacters)
+                {
+                    customCharacters.Add(character.Key, character.Value);
+                }
             }
-            defaultCharacter = (
-                   CurrentWSG.Class == "gd_Roland.Character.CharacterClass_Roland"
-                || CurrentWSG.Class == "gd_lilith.Character.CharacterClass_Lilith"
-                || CurrentWSG.Class == "gd_mordecai.Character.CharacterClass_Mordecai"
-                || CurrentWSG.Class == "gd_Brick.Character.CharacterClass_Brick");
+
             string possibleCharacter = "Unknown";
-            if(defaultCharacter == false)
+            // Some fun string handling to detect a [hopefully] properly formatted character name.
+            // Only do this string handling if it's not a default class.
+            if (defaultCharacters.ContainsValue(CurrentWSG.Class) == false)
             {
                 try
                 {
                     possibleCharacter = Regex.Split(CurrentWSG.Class, "gd_", RegexOptions.IgnoreCase)[1].Split('.')[0];
                 }
-                catch (IndexOutOfRangeException ex)
+                catch (IndexOutOfRangeException)
                 {
                     possibleCharacter = CurrentWSG.Class.Split(new string[] { "." }, StringSplitOptions.None)[0];
                 }
@@ -136,26 +138,20 @@ namespace WillowTree.Plugins
                 }
                 else
                 {
-                    if(!customCharacters.Keys.Contains(possibleCharacter) 
+                    if (!customCharacters.Keys.Contains(possibleCharacter)
                        && !customCharacters.Values.Contains(CurrentWSG.Class))
                     {
                         customCharacters.Add(possibleCharacter, CurrentWSG.Class);
                     }
                 }
             }
-
-            foreach (KeyValuePair<string, string> character in customCharacters)
+            // This'll select our current class now that it's been added.
+            foreach (var character in customCharacters)
             {
-                if (!Class.Items.Contains(character.Key))
-                {
-                    Class.Items.Add(character.Key);
-                }
-
-                if (character.Value == CurrentWSG.Class)
-                {
-                    Class.SelectedIndex = Class.Items.IndexOf(character.Key);
-                }
-
+                // No duplicates.
+                if (!Class.Items.Contains(character.Key)) Class.Items.Add(character.Key);
+                // This'll select our current class now that it's been added.
+                if (character.Value == CurrentWSG.Class) Class.SelectedIndex = Class.Items.IndexOf(character.Key);
             }
 
             // If DLC section 1 is not present then the bank does not exist, so disable the
@@ -176,7 +172,6 @@ namespace WillowTree.Plugins
             DoLocationTree();
             this.Enabled = true;
         }
-
 
         public void OnGameSaving(object sender, PluginEventArgs e)
         {
@@ -200,7 +195,7 @@ namespace WillowTree.Plugins
 
             // Try to look up the outpost name from the text that is displayed in the combo box.
             string loc = LocationsXml.XmlReadAssociatedValue("OutpostName", "OutpostDisplayName", (string)CurrentLocation.SelectedItem);
-    
+
             // If the outpost name is not found then this location is not in the data file
             // so the string stored in CurrentLocation is already the outpost name.
             if (loc == "")
@@ -211,9 +206,9 @@ namespace WillowTree.Plugins
 
         private void UpdateClass()
         {
-            foreach(KeyValuePair<string, string> character in customCharacters)
+            foreach (var character in customCharacters)
             {
-                if((string)Class.SelectedItem == character.Key)
+                if ((string)Class.SelectedItem == character.Key)
                 {
                     CurrentWSG.Class = character.Value;
                 }
@@ -235,7 +230,7 @@ namespace WillowTree.Plugins
                     CurrentLocation.Items.Add(locationToSelect);
                 loc = locationToSelect;
             }
-     
+
             // Add all the location entries that were in the WT# location file
             foreach (string location in LocationsList.Items)
                 CurrentLocation.Items.Add(location);
@@ -429,7 +424,7 @@ namespace WillowTree.Plugins
                 if (!string.IsNullOrEmpty(name))
                     writer.WriteElementString("Location", name);
             }
-   
+
             writer.WriteEndDocument();
             writer.Close();
         }
@@ -504,9 +499,9 @@ namespace WillowTree.Plugins
                 }
             }
             catch (Exception ex)
-            { 
-                MessageBox.Show("Error occurred while trying to save locations: " + ex.ToString()); 
-                return; 
+            {
+                MessageBox.Show("Error occurred while trying to save locations: " + ex.ToString());
+                return;
             }
         }
 
