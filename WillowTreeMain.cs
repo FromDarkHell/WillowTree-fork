@@ -75,15 +75,15 @@ namespace WillowTree
         {
             GlobalSettings.Load();
 
-            if (System.IO.Directory.Exists(db.DataPath) == false)
+            if (Directory.Exists(db.DataPath) == false)
             {
                 MessageBox.Show("Couldn't find the 'Data' folder! Please make sure that WillowTree# and its data folder are in the same directory.");
                 Application.Exit();
                 return;
             }
 
-            if (System.IO.File.Exists(db.DataPath + "default.xml") == false)
-                System.IO.File.WriteAllText(db.DataPath + "default.xml", "<?xml version=\"1.0\" encoding=\"us-ascii\"?>\r\n<INI></INI>\r\n");
+            if (File.Exists(db.DataPath + "default.xml") == false)
+                File.WriteAllText(db.DataPath + "default.xml", "<?xml version=\"1.0\" encoding=\"us-ascii\"?>\r\n<INI></INI>\r\n");
 
             InitializeComponent();
 
@@ -153,7 +153,7 @@ namespace WillowTree
 
                 // Detach the parts list from the bank entry.
                 itmBank[i].Parts = null;
- 
+
                 // Items have a different part order in the bank and in the backpack
                 // Part                Index      Index
                 //                   Inventory    Bank
@@ -171,7 +171,7 @@ namespace WillowTree
 
                 // Convert all items into the backpack part order.  Weapons use
                 // the same format for both backpack and bank.
-      
+
                 if (itmType == InventoryType.Item)
                 {
                     string temp = parts[1];
@@ -184,8 +184,8 @@ namespace WillowTree
                     parts[5] = parts[6];
                     parts[6] = temp;
                 }
-                
-                
+
+
                 // Create an inventory entry with the re-ordered parts list and add it
                 itmList.AddSilent(new InventoryEntry((byte)(itmBank[i].TypeId - 1), parts, itmBankValues));
                 //Item/Weapon in bank have their type increase by 1, we reduce TypeId by 1 to manipulate them like other list
@@ -196,7 +196,7 @@ namespace WillowTree
             // to the format that the WillowTree UI uses.  It gets recreated at save time.
             itmBank = null;
         }
-        
+
         private void RepopulateListForSaving(InventoryList itmList, ref List<List<string>> itmStrings, ref List<List<int>> itmValues)
         {
             itmStrings = new List<List<string>>();
@@ -236,7 +236,7 @@ namespace WillowTree
                     // Items must have their parts reordered because they are different in the bank.
                     List<string> oldParts = item.Parts;
                     itm.Parts = new List<string>() { oldParts[1], oldParts[0], oldParts[6], oldParts[2], oldParts[3],
-                                                                  oldParts[4], oldParts[5], oldParts[7], oldParts[8] };     
+                                                                  oldParts[4], oldParts[5], oldParts[7], oldParts[8] };
                 }
                 else
                     itm.Parts = new List<string>(item.Parts);
@@ -263,8 +263,7 @@ namespace WillowTree
 
         private void DoWindowTitle()
         {
-            ucGeneral eGeneral = PluginManager.GetPlugin(typeof(ucGeneral)) as ucGeneral;
-            if (eGeneral != null)
+            if (PluginManager.GetPlugin(typeof(ucGeneral)) is ucGeneral eGeneral)
                 eGeneral.DoWindowTitle();
         }
 
@@ -313,28 +312,24 @@ namespace WillowTree
         }
         private void Save_Click(object sender, EventArgs e)
         {
-            if(GlobalSettings.backupSaves)
+            if (GlobalSettings.backupSaves)
             {
                 try
                 {
                     File.Copy(CurrentWSG.OpenedWSG, CurrentWSG.OpenedWSG + ".bak0", true);
-                    if (File.Exists(CurrentWSG.OpenedWSG + ".bak10") == true)
+                    if (File.Exists(CurrentWSG.OpenedWSG + ".bak10"))
                         File.Delete(CurrentWSG.OpenedWSG + ".bak10");
                     for (int i = 9; i >= 0; i--)
                     {
-                        if (File.Exists(CurrentWSG.OpenedWSG + ".bak" + i) == true)
+                        if (File.Exists(CurrentWSG.OpenedWSG + ".bak" + i))
                             File.Move(CurrentWSG.OpenedWSG + ".bak" + i, CurrentWSG.OpenedWSG + ".bak" + (i + 1));
                     }
                 }
                 catch { }
             }
 
-//            try
-            {
-                SaveToFile(CurrentWSG.OpenedWSG);
-                MessageBox.Show("Saved WSG to: " + CurrentWSG.OpenedWSG);
-            }
-//            catch { MessageBox.Show("Couldn't save WSG"); }
+            SaveToFile(CurrentWSG.OpenedWSG);
+            MessageBox.Show("Saved WSG to: " + CurrentWSG.OpenedWSG);
         }
         private void SaveAs_Click(object sender, EventArgs e)
         {
@@ -342,9 +337,9 @@ namespace WillowTree
 
             if (tempSave.ShowDialog() == DialogResult.OK)
             {
-                    SaveToFile(tempSave.FileName());
-                    MessageBox.Show("Saved WSG to: " + CurrentWSG.OpenedWSG);
-                    Save.Enabled = true;
+                SaveToFile(tempSave.FileName());
+                MessageBox.Show("Saved WSG to: " + CurrentWSG.OpenedWSG);
+                Save.Enabled = true;
             }
         }
         private void New_Click(object sender, EventArgs e)
@@ -470,7 +465,7 @@ namespace WillowTree
             CurrentWSG.OpenedWSG = "";
             Save.Enabled = false;
         }
-        
+
         private void ExitWT_Click(object sender, EventArgs e)
         {
             GlobalSettings.Save();
@@ -499,7 +494,7 @@ namespace WillowTree
         private void SaveToFile(string filename)
         {
             PluginManager.OnGameSaving(new PluginEventArgs(this, filename));
-			Application.DoEvents();
+            Application.DoEvents();
 
             // Convert the weapons and items data from WeaponList/ItemList into
             // the format used by WillowSaveGame.
@@ -523,15 +518,13 @@ namespace WillowTree
 
         private void NextSort_Click(object sender, EventArgs e)
         {
-            IPlugin page = tabControl1.TabPages[tabControl1.SelectedIndex] as IPlugin;
-            if (page != null)
+            if (tabControl1.TabPages[tabControl1.SelectedIndex] is IPlugin page)
                 PluginManager.OnPluginCommand(page, new PluginCommandEventArgs(this, PluginCommand.ChangeSortMode));
         }
 
         private void IncreaseNavigationLayers_Click(object sender, EventArgs e)
         {
-            IPlugin page = tabControl1.TabPages[tabControl1.SelectedIndex] as IPlugin;
-            if (page != null)
+            if (tabControl1.TabPages[tabControl1.SelectedIndex] is IPlugin page)
                 PluginManager.OnPluginCommand(page, new PluginCommandEventArgs(this, PluginCommand.IncreaseNavigationDepth));
         }
 
@@ -625,12 +618,12 @@ namespace WillowTree
         {
             if ((SelectedTabObject != null) && (SelectedTabObject is IPlugin))
                 PluginManager.OnPluginUnselected(SelectedTabObject as IPlugin, new PluginEventArgs(this, null));
-            
+
             int selected = tabControl1.SelectedIndex;
             if (selected >= 0)
             {
                 SelectedTabObject = tabControl1.Controls[selected];
-                if ((SelectedTabObject != null) && (SelectedTabObject is IPlugin)) 
+                if ((SelectedTabObject != null) && (SelectedTabObject is IPlugin))
                     PluginManager.OnPluginSelected(SelectedTabObject as IPlugin, new PluginEventArgs(this, null));
             }
             else
@@ -738,7 +731,7 @@ namespace WillowTree
             // in e (DrawEventArgs) unless custom colors are desired.  The color of
             // nodes usually depends on whether they are selected or active.  That
             // information is stored in e.Context.DrawSelectionMode.
-            
+
             // e.Node is a TreeNodeAdv navigation node.  e.Node.Tag points to the 
             // actual data node which must be of type Node or a descendant of 
             // Node.  It is ColoredTextNode in this program.
@@ -864,7 +857,7 @@ namespace WillowTree
                 Node data = node.Tag as Node;
 
                 // Check this node
-                if (data.Tag.Equals(searchTag)) 
+                if (data.Tag.Equals(searchTag))
                     yield return node;
 
                 // Select the next node
@@ -1023,7 +1016,7 @@ namespace WillowTree
                 Node data = node.Tag as Node;
 
                 // Check this node
-           		if (data.Tag.Equals(searchTag))
+                if (data.Tag.Equals(searchTag))
                     yield return node;
 
                 // Select the next node

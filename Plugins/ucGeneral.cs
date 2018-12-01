@@ -113,15 +113,13 @@ namespace WillowTree.Plugins
             if (!customCharacters.ContainsValue("gd_Roland.Character.CharacterClass_Roland"))
             {
                 foreach (var character in defaultCharacters)
-                {
                     customCharacters.Add(character.Key, character.Value);
-                }
             }
 
             string possibleCharacter = "Unknown";
             // Some fun string handling to detect a [hopefully] properly formatted character name.
             // Only do this string handling if it's not a default class.
-            if (defaultCharacters.ContainsValue(CurrentWSG.Class) == false)
+            if (!defaultCharacters.ContainsValue(CurrentWSG.Class))
             {
                 try
                 {

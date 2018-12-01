@@ -15,7 +15,6 @@
  *  You should have received a copy of the GNU General Public License
  *  along with WillowTree#.  If not, see <http://www.gnu.org/licenses/>.
  */
-using System;
 //using System.Linq;
 using System.ComponentModel;
 //using System.Windows.Forms;
@@ -23,7 +22,7 @@ using System.ComponentModel;
 namespace WillowTree
 {
     [DesignTimeVisible(false)]
-    [System.ComponentModel.DesignerCategory("")]
+    [DesignerCategory("")]
     public class BasicTheme : Component
     {
         public CustomControls.CheckBoxTheme checkBoxTheme1;
@@ -40,17 +39,17 @@ namespace WillowTree
 
         private void InitializeComponent()
         {
-            this.buttonTheme1 = new WillowTree.CustomControls.ButtonTheme();
-            this.checkBoxTheme1 = new WillowTree.CustomControls.CheckBoxTheme();
-            this.comboBoxTheme1 = new WillowTree.CustomControls.ComboBoxTheme();
-            this.groupBoxTheme1 = new WillowTree.CustomControls.GroupBoxTheme();
-            this.labelTheme1 = new WillowTree.CustomControls.LabelTheme();
-            this.listBoxTheme1 = new WillowTree.CustomControls.ListBoxTheme();
-            this.numericUpDownTheme1 = new WillowTree.CustomControls.NumericUpDownTheme();
-            this.slideSelectorTheme1 = new WillowTree.CustomControls.SlideSelectorTheme();
-            this.tabTheme1 = new WillowTree.CustomControls.TabControlTheme();
-            this.textBoxTheme1 = new WillowTree.CustomControls.TextBoxTheme();
-            this.treeViewTheme1 = new WillowTree.CustomControls.TreeViewTheme();
+            this.buttonTheme1 = new CustomControls.ButtonTheme();
+            this.checkBoxTheme1 = new CustomControls.CheckBoxTheme();
+            this.comboBoxTheme1 = new CustomControls.ComboBoxTheme();
+            this.groupBoxTheme1 = new CustomControls.GroupBoxTheme();
+            this.labelTheme1 = new CustomControls.LabelTheme();
+            this.listBoxTheme1 = new CustomControls.ListBoxTheme();
+            this.numericUpDownTheme1 = new CustomControls.NumericUpDownTheme();
+            this.slideSelectorTheme1 = new CustomControls.SlideSelectorTheme();
+            this.tabTheme1 = new CustomControls.TabControlTheme();
+            this.textBoxTheme1 = new CustomControls.TextBoxTheme();
+            this.treeViewTheme1 = new CustomControls.TreeViewTheme();
             // 
             // buttonTheme1
             // 
