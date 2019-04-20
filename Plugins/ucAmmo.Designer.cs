@@ -52,6 +52,14 @@ namespace WillowTree.Plugins
             this.groupPanel9 = new WillowTree.CustomControls.WTGroupBox();
             this.MenuAmmo = new WillowTree.CustomControls.WTMenuStrip();
             this.newToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.combatRifleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.grenadeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.launcherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.repeaterPistolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.revolverPistolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.shotgunToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sMGToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sniperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.AmmoTree = new WillowTree.CustomControls.WTTreeView();
             this.groupPanel15 = new WillowTree.CustomControls.WTGroupBox();
@@ -59,6 +67,7 @@ namespace WillowTree.Plugins
             this.AmmoPoolRemaining = new WillowTree.CustomControls.WTNumericUpDown();
             this.labelAmmoSDULevel = new WillowTree.CustomControls.WTLabel();
             this.labelAmmoRemaining = new WillowTree.CustomControls.WTLabel();
+            this.customToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.AmmoTab.SuspendLayout();
             this.groupPanel9.SuspendLayout();
             this.MenuAmmo.SuspendLayout();
@@ -69,9 +78,9 @@ namespace WillowTree.Plugins
             // 
             // AmmoTab
             // 
-            this.AmmoTab.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.AmmoTab.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.AmmoTab.Controls.Add(this.groupPanel9);
             this.AmmoTab.Controls.Add(this.groupPanel15);
             this.AmmoTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -85,8 +94,8 @@ namespace WillowTree.Plugins
             // 
             // groupPanel9
             // 
-            this.groupPanel9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupPanel9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.groupPanel9.Controls.Add(this.MenuAmmo);
             this.groupPanel9.Controls.Add(this.AmmoTree);
             this.groupPanel9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -112,10 +121,75 @@ namespace WillowTree.Plugins
             // 
             // newToolStripMenuItem2
             // 
+            this.newToolStripMenuItem2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.combatRifleToolStripMenuItem,
+            this.grenadeToolStripMenuItem,
+            this.launcherToolStripMenuItem,
+            this.repeaterPistolToolStripMenuItem,
+            this.revolverPistolToolStripMenuItem,
+            this.shotgunToolStripMenuItem,
+            this.sMGToolStripMenuItem,
+            this.sniperToolStripMenuItem,
+            this.customToolStripMenuItem});
             this.newToolStripMenuItem2.Name = "newToolStripMenuItem2";
             this.newToolStripMenuItem2.Size = new System.Drawing.Size(41, 20);
             this.newToolStripMenuItem2.Text = "New";
-            this.newToolStripMenuItem2.Click += new System.EventHandler(this.NewAmmo_Click);
+            // 
+            // combatRifleToolStripMenuItem
+            // 
+            this.combatRifleToolStripMenuItem.Name = "combatRifleToolStripMenuItem";
+            this.combatRifleToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.combatRifleToolStripMenuItem.Text = "Combat Rifle";
+            this.combatRifleToolStripMenuItem.Click += new System.EventHandler(this.combatRifleToolStripMenuItem_Click);
+            // 
+            // grenadeToolStripMenuItem
+            // 
+            this.grenadeToolStripMenuItem.Name = "grenadeToolStripMenuItem";
+            this.grenadeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.grenadeToolStripMenuItem.Text = "Grenade";
+            this.grenadeToolStripMenuItem.Click += new System.EventHandler(this.grenadeToolStripMenuItem_Click);
+            // 
+            // launcherToolStripMenuItem
+            // 
+            this.launcherToolStripMenuItem.Name = "launcherToolStripMenuItem";
+            this.launcherToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.launcherToolStripMenuItem.Text = "Launcher";
+            this.launcherToolStripMenuItem.Click += new System.EventHandler(this.launcherToolStripMenuItem_Click);
+            // 
+            // repeaterPistolToolStripMenuItem
+            // 
+            this.repeaterPistolToolStripMenuItem.Name = "repeaterPistolToolStripMenuItem";
+            this.repeaterPistolToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.repeaterPistolToolStripMenuItem.Text = "Repeater Pistol";
+            this.repeaterPistolToolStripMenuItem.Click += new System.EventHandler(this.repeaterPistolToolStripMenuItem_Click);
+            // 
+            // revolverPistolToolStripMenuItem
+            // 
+            this.revolverPistolToolStripMenuItem.Name = "revolverPistolToolStripMenuItem";
+            this.revolverPistolToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.revolverPistolToolStripMenuItem.Text = "Revolver Pistol";
+            this.revolverPistolToolStripMenuItem.Click += new System.EventHandler(this.revolverPistolToolStripMenuItem_Click);
+            // 
+            // shotgunToolStripMenuItem
+            // 
+            this.shotgunToolStripMenuItem.Name = "shotgunToolStripMenuItem";
+            this.shotgunToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.shotgunToolStripMenuItem.Text = "Shotgun";
+            this.shotgunToolStripMenuItem.Click += new System.EventHandler(this.shotgunToolStripMenuItem_Click);
+            // 
+            // sMGToolStripMenuItem
+            // 
+            this.sMGToolStripMenuItem.Name = "sMGToolStripMenuItem";
+            this.sMGToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sMGToolStripMenuItem.Text = "SMG";
+            this.sMGToolStripMenuItem.Click += new System.EventHandler(this.sMGToolStripMenuItem_Click);
+            // 
+            // sniperToolStripMenuItem
+            // 
+            this.sniperToolStripMenuItem.Name = "sniperToolStripMenuItem";
+            this.sniperToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sniperToolStripMenuItem.Text = "Sniper";
+            this.sniperToolStripMenuItem.Click += new System.EventHandler(this.sniperToolStripMenuItem_Click);
             // 
             // deleteToolStripMenuItem2
             // 
@@ -128,8 +202,8 @@ namespace WillowTree.Plugins
             // 
             this.AmmoTree.AccessibleRole = System.Windows.Forms.AccessibleRole.Outline;
             this.AmmoTree.AllowDrop = true;
-            this.AmmoTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.AmmoTree.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.AmmoTree.DefaultToolTipProvider = null;
             this.AmmoTree.DragDropMarkColor = System.Drawing.Color.Black;
             this.AmmoTree.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -146,8 +220,8 @@ namespace WillowTree.Plugins
             // 
             // groupPanel15
             // 
-            this.groupPanel15.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupPanel15.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupPanel15.Controls.Add(this.AmmoSDULevel);
             this.groupPanel15.Controls.Add(this.AmmoPoolRemaining);
             this.groupPanel15.Controls.Add(this.labelAmmoSDULevel);
@@ -219,6 +293,13 @@ namespace WillowTree.Plugins
             this.labelAmmoRemaining.TabIndex = 0;
             this.labelAmmoRemaining.Text = "Remaining Ammo";
             // 
+            // customToolStripMenuItem
+            // 
+            this.customToolStripMenuItem.Name = "customToolStripMenuItem";
+            this.customToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.customToolStripMenuItem.Text = "Custom";
+            this.customToolStripMenuItem.Click += new System.EventHandler(this.customToolStripMenuItem_Click);
+            // 
             // ucAmmo
             // 
             this.Controls.Add(this.AmmoTab);
@@ -250,5 +331,14 @@ namespace WillowTree.Plugins
         private CustomControls.WTNumericUpDown AmmoPoolRemaining;
         private CustomControls.WTLabel labelAmmoSDULevel;
         private CustomControls.WTLabel labelAmmoRemaining;
+        private System.Windows.Forms.ToolStripMenuItem combatRifleToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem grenadeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem launcherToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem repeaterPistolToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem revolverPistolToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem shotgunToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sMGToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem sniperToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem customToolStripMenuItem;
     }
 }

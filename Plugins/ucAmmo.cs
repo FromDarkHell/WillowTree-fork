@@ -19,8 +19,8 @@
  *  along with WillowTree#.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-//using System.Drawing;
-//using System.Linq;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Aga.Controls.Tree;
 
@@ -44,7 +44,7 @@ namespace WillowTree.Plugins
             this.Enabled = false;
         }
 
-        public void ReleasePlugin() 
+        public void ReleasePlugin()
         {
             CurrentWSG = null;
         }
@@ -93,6 +93,28 @@ namespace WillowTree.Plugins
                 return d_resources;
         }
 
+        public string getResourcePool(string ammoName)
+        {
+            if (ammoName == "Sniper Rifle")
+                return "d_resources.AmmoResources.Ammo_Sniper_Rifle";
+            else if (ammoName == "Repeater Pistol")
+                return "d_resources.AmmoResources.Ammo_Repeater_Pistol";
+            else if (ammoName == "Protean Grenades")
+                return "d_resources.AmmoResources.Ammo_Grenade_Protean";
+            else if (ammoName == "Patrol SMG")
+                return "d_resources.AmmoResources.Ammo_Patrol_SMG";
+            else if (ammoName == "Combat Shotgun")
+                return "d_resources.AmmoResources.Ammo_Combat_Shotgun";
+            else if (ammoName == "Combat Rifle")
+                return "d_resources.AmmoResources.Ammo_Combat_Rifle";
+            else if (ammoName == "Revolver Pistol")
+                return "d_resources.AmmoResources.Ammo_Revolver_Pistol";
+            else if (ammoName == "Rocket Launcher")
+                return "d_resources.AmmoResources.Ammo_Rocket_Launcher";
+            else
+                return ammoName;
+        }
+
         private void AmmoTree_SelectionChanged(object sender, EventArgs e)
         {
             TreeNodeAdv selectedNode = AmmoTree.SelectedNode;
@@ -100,7 +122,7 @@ namespace WillowTree.Plugins
             {
                 Util.SetNumericUpDown(AmmoPoolRemaining, (decimal)CurrentWSG.RemainingPools[selectedNode.Index]);
                 Util.SetNumericUpDown(AmmoSDULevel, CurrentWSG.PoolLevels[selectedNode.Index]);
-            }              
+            }
         }
 
         private void AmmoPoolRemaining_ValueChanged(object sender, EventArgs e)
@@ -117,20 +139,108 @@ namespace WillowTree.Plugins
                 CurrentWSG.PoolLevels[selectedNode.Index] = (int)AmmoSDULevel.Value;
         }
 
+
         private void DeleteAmmo_Click(object sender, EventArgs e)
         {
             if (AmmoTree.SelectedNode != null)
             {
-                CurrentWSG.NumberOfPools = CurrentWSG.NumberOfPools - 1;
-                Util.ResizeArraySmaller(ref CurrentWSG.AmmoPools, CurrentWSG.NumberOfPools);
-                Util.ResizeArraySmaller(ref CurrentWSG.ResourcePools, CurrentWSG.NumberOfPools);
-                Util.ResizeArraySmaller(ref CurrentWSG.RemainingPools, CurrentWSG.NumberOfPools);
-                Util.ResizeArraySmaller(ref CurrentWSG.PoolLevels, CurrentWSG.NumberOfPools);
+                List<string> resourcePools = CurrentWSG.ResourcePools.ToList();
+                foreach (TreeNodeAdv node in AmmoTree.SelectedNodes)
+                {
+                    CurrentWSG.NumberOfPools = CurrentWSG.NumberOfPools - 1;
+                    int index = resourcePools.IndexOf(getResourcePool(node.ToString()));
+
+                    List<string> gamma = CurrentWSG.ResourcePools.ToList();
+                    gamma.RemoveAt(index);
+                    CurrentWSG.ResourcePools = gamma.ToArray();
+
+                    gamma = CurrentWSG.AmmoPools.ToList();
+                    gamma.RemoveAt(index);
+                    CurrentWSG.AmmoPools = gamma.ToArray();
+
+                    List<float> beta = CurrentWSG.RemainingPools.ToList();
+                    beta.RemoveAt(index);
+                    CurrentWSG.RemainingPools = beta.ToArray();
+
+                    List<int> omega = CurrentWSG.PoolLevels.ToList();
+                    omega.RemoveAt(index);
+                    CurrentWSG.PoolLevels = omega.ToArray();
+                }
                 DoAmmoTree();
             }
         }
 
-        private void NewAmmo_Click(object sender, EventArgs e)
+        private void AmmoTree_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+                DeleteAmmo_Click(this, EventArgs.Empty);
+        }
+
+        private void combatRifleToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            resizePools();
+            CurrentWSG.AmmoPools[CurrentWSG.NumberOfPools - 1] = "d_resourcepools.AmmoPools.Ammo_Combat_Rifle_Pool";
+            CurrentWSG.ResourcePools[CurrentWSG.NumberOfPools - 1] = "d_resources.AmmoResources.Ammo_Combat_Rifle";
+            DoAmmoTree();
+        }
+
+        private void grenadeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            resizePools();
+            CurrentWSG.AmmoPools[CurrentWSG.NumberOfPools - 1] = "d_resourcepools.AmmoPools.Ammo_Grenade_Protean_Pool";
+            CurrentWSG.ResourcePools[CurrentWSG.NumberOfPools - 1] = "d_resources.AmmoResources.Ammo_Grenade_Protean";
+            DoAmmoTree();
+        }
+
+        private void launcherToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            resizePools();
+            CurrentWSG.AmmoPools[CurrentWSG.NumberOfPools - 1] = "d_resourcepools.AmmoPools.Ammo_Rocket_Launcher_Pool";
+            CurrentWSG.ResourcePools[CurrentWSG.NumberOfPools - 1] = "d_resources.AmmoResources.Ammo_Rocket_Launcher";
+            DoAmmoTree();
+        }
+
+        private void repeaterPistolToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            resizePools();
+            CurrentWSG.AmmoPools[CurrentWSG.NumberOfPools - 1] = "d_resourcepools.AmmoPools.Ammo_Repeater_Pistol_Pool";
+            CurrentWSG.ResourcePools[CurrentWSG.NumberOfPools - 1] = "d_resources.AmmoResources.Ammo_Repeater_Pistol";
+            DoAmmoTree();
+        }
+
+        private void revolverPistolToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            resizePools();
+            CurrentWSG.AmmoPools[CurrentWSG.NumberOfPools - 1] = "d_resourcepools.AmmoPools.Ammo_Revolver_Pistol_Pool";
+            CurrentWSG.ResourcePools[CurrentWSG.NumberOfPools - 1] = "d_resources.AmmoResources.Ammo_Revolver_Pistol";
+            DoAmmoTree();
+        }
+
+        private void shotgunToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            resizePools();
+            CurrentWSG.AmmoPools[CurrentWSG.NumberOfPools - 1] = "d_resourcepools.AmmoPools.Ammo_Combat_Shotgun_Pool";
+            CurrentWSG.ResourcePools[CurrentWSG.NumberOfPools - 1] = "d_resources.AmmoResources.Ammo_Combat_Shotgun";
+            DoAmmoTree();
+        }
+
+        private void sMGToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            resizePools();
+            CurrentWSG.AmmoPools[CurrentWSG.NumberOfPools - 1] = "d_resourcepools.AmmoPools.Ammo_Patrol_SMG_Pool";
+            CurrentWSG.ResourcePools[CurrentWSG.NumberOfPools - 1] = "d_resources.AmmoResources.Ammo_Patrol_SMG";
+            DoAmmoTree();
+        }
+
+        private void sniperToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            resizePools();
+            CurrentWSG.AmmoPools[CurrentWSG.NumberOfPools - 1] = "d_resourcepools.AmmoPools.Ammo_Sniper_Rifle_Pool";
+            CurrentWSG.ResourcePools[CurrentWSG.NumberOfPools - 1] = "d_resources.AmmoResources.Ammo_Sniper_Rifle";
+            DoAmmoTree();
+        }
+
+        private void customToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
             {
@@ -147,14 +257,19 @@ namespace WillowTree.Plugins
                     CurrentWSG.ResourcePools[CurrentWSG.NumberOfPools - 1] = New_d_resources;
                     DoAmmoTree();
                 }
+
             }
             catch { MessageBox.Show("Couldn't add new ammo pool."); }
         }
 
-        private void AmmoTree_KeyDown(object sender, KeyEventArgs e)
+        private void resizePools()
         {
-            if (e.KeyCode == Keys.Delete)
-                DeleteAmmo_Click(this, EventArgs.Empty);
+            CurrentWSG.NumberOfPools = CurrentWSG.NumberOfPools + 1;
+            Util.ResizeArrayLarger(ref CurrentWSG.AmmoPools, CurrentWSG.NumberOfPools);
+            Util.ResizeArrayLarger(ref CurrentWSG.ResourcePools, CurrentWSG.NumberOfPools);
+            Util.ResizeArrayLarger(ref CurrentWSG.RemainingPools, CurrentWSG.NumberOfPools);
+            Util.ResizeArrayLarger(ref CurrentWSG.PoolLevels, CurrentWSG.NumberOfPools);
         }
+
     }
 }
